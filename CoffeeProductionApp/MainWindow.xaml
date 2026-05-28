@@ -1,0 +1,55 @@
+﻿<Window x:Class="CoffeeProductionApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Кофейное производство - полный цикл" Height="700" Width="1100">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="Справочники">
+                <MenuItem Header="Плантации" Click="ОткрытьПлантации_Click"/>
+                <MenuItem Header="Сотрудники" Click="ОткрытьСотрудники_Click"/>
+                <MenuItem Header="Типы операций" Click="ОткрытьТипыОпераций_Click"/>
+                <MenuItem Header="Профили обжарки" Click="ОткрытьПрофилиОбжарки_Click"/>
+                <MenuItem Header="Готовая продукция" Click="ОткрытьПродукцию_Click"/>
+                <MenuItem Header="Розничные магазины" Click="ОткрытьМагазины_Click"/>
+                <MenuItem Header="Склады" Click="ОткрытьСклады_Click"/>
+            </MenuItem>
+            <MenuItem Header="Документы">
+                <MenuItem Header="Агротехнические операции" Click="ОткрытьАгроОперации_Click"/>
+                <MenuItem Header="Урожай" Click="ОткрытьУрожай_Click"/>
+                <MenuItem Header="Партии зеленого зерна" Click="ОткрытьПартииЗерна_Click"/>
+                <MenuItem Header="Производственные заказы" Click="ОткрытьПроизводствоЗаказы_Click"/>
+                <MenuItem Header="Партии готовой продукции" Click="ОткрытьПартииГП_Click"/>
+                <MenuItem Header="Поступление в магазин" Click="ОткрытьПоступление_Click"/>
+            </MenuItem>
+            <MenuItem Header="B2B">
+                <MenuItem Header="Договоры поставки" Click="ОткрытьДоговоры_Click"/>
+                <MenuItem Header="Заказы B2B" Click="ОткрытьЗаказыB2B_Click"/>
+            </MenuItem>
+            <MenuItem Header="Качество">
+                <MenuItem Header="Анализы качества" Click="ОткрытьАнализы_Click"/>
+                <MenuItem Header="Сертификаты" Click="ОткрытьСертификаты_Click"/>
+            </MenuItem>
+            <MenuItem Header="Отчёты">
+                <MenuItem Header="Остатки зерна на складе" Click="ОтчетОстаткиЗерна_Click"/>
+                <MenuItem Header="Себестоимость партий ГП" Click="ОтчетСебестоимость_Click"/>
+                <MenuItem Header="Выполнение производственных заказов" Click="ОтчетВыполнениеЗаказов_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <DataGrid x:Name="ТаблицаДанных" Grid.Row="1" AutoGenerateColumns="True" Margin="10" IsReadOnly="True" FontSize="13"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="КнопкаДобавить" Content="➕ Добавить" Width="120" Height="35" Margin="5" Click="КнопкаДобавить_Click" FontSize="13"/>
+            <Button x:Name="КнопкаИзменить" Content="✏️ Изменить" Width="120" Height="35" Margin="5" Click="КнопкаИзменить_Click" FontSize="13"/>
+            <Button x:Name="КнопкаУдалить" Content="🗑️ Удалить" Width="120" Height="35" Margin="5" Click="КнопкаУдалить_Click" FontSize="13"/>
+            <Button x:Name="КнопкаОбновить" Content="🔄 Обновить" Width="120" Height="35" Margin="5" Click="КнопкаОбновить_Click" FontSize="13"/>
+        </StackPanel>
+    </Grid>
+</Window>
