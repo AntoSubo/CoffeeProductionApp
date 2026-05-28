@@ -86,6 +86,7 @@ namespace CoffeeProductionApp.DAL
                 case "FlavorNotes": return "вкусовые_ноты";
                 case "DefaultPackageType": return "тип_упаковки_по_умолчанию";
                 case "ReleaseDate": return "дата_выпуска";
+                case "ProductCatalogId": return "справочник_гп_вк";
                 case "PackageType": return "тип_упаковки";
                 case "PackageCount": return "количество_упаковок";
                 case "UnitCost": return "себестоимость_единицы";
@@ -101,7 +102,6 @@ namespace CoffeeProductionApp.DAL
                 case "ContractId": return "договор_вк";
                 case "RoleInContract": return "роль_в_договоре";
                 case "B2BOrderId": return "заказ_в2в_вк";
-                case "ProductCatalogId": return "справочник_гп_вк";
                 case "Quantity": return "количество";
                 case "ShopId": return "магазин_вк";
                 case "FinishedProductBatchId": return "партия_гп_вк";

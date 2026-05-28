@@ -46,9 +46,13 @@ namespace CoffeeProductionApp
 
             var строка = (DataRowView)ТаблицаДанных.SelectedItem;
 
-            if (строка.Row.Table.Columns.Contains("ид"))
+            foreach (DataColumn колонка in строка.Row.Table.Columns)
             {
-                return Convert.ToInt32(строка["ид"]);
+                string имя = колонка.ColumnName.ToLower();
+                if (имя == "ид" || имя.StartsWith("ид_"))
+                {
+                    return Convert.ToInt32(строка[колонка.ColumnName]);
+                }
             }
 
             return 0;
@@ -442,27 +446,36 @@ namespace CoffeeProductionApp
                         return;
                     }
 
-                    if (_текущаяТаблица == "Плантации")
-                        _плантацииРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Сотрудники")
-                        _сотрудникиРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "ТипыОпераций")
-                        new Repository<OperationType>().Delete(ид);
-                    else if (_текущаяТаблица == "ПрофилиОбжарки")
-                        _профилиРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Продукция")
-                        _продукцияРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Магазины")
-                        _магазиныРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Склады")
-                        new Repository<Warehouse>().Delete(ид);
-                    else
+                    switch (_текущаяТаблица)
                     {
-                        MessageBox.Show($"Удаление для раздела \"{_текущаяТаблица}\" не реализовано", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
-                        return;
+                        case "Плантации":
+                            _плантацииРепозиторий.Delete(ид);
+                            break;
+                        case "Сотрудники":
+                            _сотрудникиРепозиторий.Delete(ид);
+                            break;
+                        case "ТипыОпераций":
+                            new Repository<OperationType>().Delete(ид);
+                            break;
+                        case "ПрофилиОбжарки":
+                            _профилиРепозиторий.Delete(ид);
+                            break;
+                        case "Продукция":
+                            _продукцияРепозиторий.Delete(ид);
+                            break;
+                        case "Магазины":
+                            _магазиныРепозиторий.Delete(ид);
+                            break;
+                        case "Склады":
+                            new Repository<Warehouse>().Delete(ид);
+                            break;
+                        default:
+                            MessageBox.Show($"Удаление для раздела \"{_текущаяТаблица}\" не реализовано", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
+                            return;
                     }
 
                     КнопкаОбновить_Click(null, null);
+                    MessageBox.Show("Запись успешно удалена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {

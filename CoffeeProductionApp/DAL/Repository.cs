@@ -25,7 +25,8 @@ namespace CoffeeProductionApp.DAL
 
         public T GetById(int id)
         {
-            string query = $"SELECT * FROM {_tableName} WHERE ид = @id";
+            string idColumnName = GetIdColumnName();
+            string query = $"SELECT * FROM {_tableName} WHERE {idColumnName} = @id";
             SqlParameter[] parameters = { new SqlParameter("@id", id) };
             DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
 
@@ -61,11 +62,12 @@ namespace CoffeeProductionApp.DAL
         {
             var (setClause, parameters) = BuildUpdateParameters(entity);
             int id = GetIdValue(entity);
+            string idColumnName = GetIdColumnName();
 
             string query = $@"
                 UPDATE {_tableName} 
                 SET {setClause}
-                WHERE ид = @id";
+                WHERE {idColumnName} = @id";
 
             SqlParameter[] allParams = new SqlParameter[parameters.Length + 1];
             Array.Copy(parameters, allParams, parameters.Length);
@@ -76,7 +78,8 @@ namespace CoffeeProductionApp.DAL
 
         public int Delete(int id)
         {
-            string query = $"DELETE FROM {_tableName} WHERE ид = @id";
+            string idColumnName = GetIdColumnName();
+            string query = $"DELETE FROM {_tableName} WHERE {idColumnName} = @id";
             SqlParameter[] parameters = { new SqlParameter("@id", id) };
             return DatabaseHelper.ExecuteNonQuery(query, parameters);
         }
@@ -89,6 +92,23 @@ namespace CoffeeProductionApp.DAL
         public int ExecuteCustomCommand(string query, SqlParameter[] parameters = null)
         {
             return DatabaseHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        private string GetIdColumnName()
+        {
+            string query = $"SELECT TOP 1 * FROM {_tableName}";
+            DataTable dt = DatabaseHelper.ExecuteQuery(query);
+
+            foreach (DataColumn col in dt.Columns)
+            {
+                string colName = col.ColumnName.ToLower();
+                if (colName == "ид" || colName.StartsWith("ид_"))
+                {
+                    return col.ColumnName;
+                }
+            }
+
+            return dt.Columns[0].ColumnName;
         }
 
         private (string columns, string values, SqlParameter[] parameters) BuildInsertParameters(T entity)
