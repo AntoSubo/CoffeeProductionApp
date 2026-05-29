@@ -1,0 +1,32 @@
+﻿<Window x:Class="CoffeeProductionApp.RoastingProfileForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="🔥 Профиль обжарки" Height="400" Width="500" WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Название профиля:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="ПолеНазвание" Grid.Row="0" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Описание:" FontWeight="Bold" VerticalAlignment="Top"/>
+        <TextBox x:Name="ПолеОписание" Grid.Row="1" Grid.Column="1" Margin="5" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Параметры:" FontWeight="Bold" VerticalAlignment="Top"/>
+        <TextBox x:Name="ПолеПараметры" Grid.Row="2" Grid.Column="1" Margin="5" Height="100" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="КнопкаСохранить" Content="💾 Сохранить" Width="120" Height="35" Margin="10" Click="КнопкаСохранить_Click" FontSize="13" Background="LightGreen"/>
+            <Button x:Name="КнопкаОтмена" Content="❌ Отмена" Width="120" Height="35" Margin="10" Click="КнопкаОтмена_Click" FontSize="13" Background="LightCoral"/>
+        </StackPanel>
+    </Grid>
+</Window>

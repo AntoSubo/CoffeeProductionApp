@@ -18,6 +18,15 @@ namespace CoffeeProductionApp
         private Repository<SupplyContract> _договорыРепозиторий;
         private Repository<B2BOrder> _заказыB2BРепозиторий;
         private Repository<RetailShop> _магазиныРепозиторий;
+        private Repository<Warehouse> _складыРепозиторий;
+        private Repository<StorageZone> _зоныРепозиторий;
+        private Repository<StorageCell> _ячейкиРепозиторий;
+        private Repository<Certificate> _сертификатыРепозиторий;
+        private Repository<OperationType> _типыОперацийРепозиторий;
+        private Repository<AgroOperation> _агроОперацииРепозиторий;
+        private Repository<FinishedProductBatch> _партииГПРепозиторий;
+        private Repository<StoreReceipt> _поступлениеРепозиторий;
+        private Repository<QualityAnalysis> _анализыРепозиторий;
 
         private string _текущаяТаблица;
 
@@ -35,6 +44,15 @@ namespace CoffeeProductionApp
             _договорыРепозиторий = new Repository<SupplyContract>();
             _заказыB2BРепозиторий = new Repository<B2BOrder>();
             _магазиныРепозиторий = new Repository<RetailShop>();
+            _складыРепозиторий = new Repository<Warehouse>();
+            _зоныРепозиторий = new Repository<StorageZone>();
+            _ячейкиРепозиторий = new Repository<StorageCell>();
+            _сертификатыРепозиторий = new Repository<Certificate>();
+            _типыОперацийРепозиторий = new Repository<OperationType>();
+            _агроОперацииРепозиторий = new Repository<AgroOperation>();
+            _партииГПРепозиторий = new Repository<FinishedProductBatch>();
+            _поступлениеРепозиторий = new Repository<StoreReceipt>();
+            _анализыРепозиторий = new Repository<QualityAnalysis>();
 
             ОткрытьПлантации_Click(null, null);
         }
@@ -163,6 +181,64 @@ namespace CoffeeProductionApp
             ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
         }
 
+        private void ОткрытьЗоныХранения_Click(object sender, RoutedEventArgs e)
+        {
+            _текущаяТаблица = "ЗоныХранения";
+            string запрос = @"
+                SELECT 
+                    зона_хранения.ид_зоны AS ид,
+                    зона_хранения.название_зоны AS НазваниеЗоны,
+                    склад.название AS Склад
+                FROM зона_хранения
+                JOIN склад ON зона_хранения.склад_вк = склад.ид_склада
+                ORDER BY склад.название, зона_хранения.название_зоны";
+            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
+        }
+
+        private void ОткрытьЯчейкиХранения_Click(object sender, RoutedEventArgs e)
+        {
+            _текущаяТаблица = "ЯчейкиХранения";
+            string запрос = @"
+                SELECT 
+                    ячейка_хранения.ид_ячейки AS ид,
+                    ячейка_хранения.код_ячейки AS КодЯчейки,
+                    зона_хранения.название_зоны AS Зона,
+                    склад.название AS Склад
+                FROM ячейка_хранения
+                JOIN зона_хранения ON ячейка_хранения.зона_вк = зона_хранения.ид_зоны
+                JOIN склад ON зона_хранения.склад_вк = склад.ид_склада
+                ORDER BY склад.название, зона_хранения.название_зоны, ячейка_хранения.код_ячейки";
+            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
+        }
+
+        private void ОткрытьДоговоры_Click(object sender, RoutedEventArgs e)
+        {
+            _текущаяТаблица = "Договоры";
+            string запрос = @"
+                SELECT 
+                    ид_договора AS ид,
+                    номер_договора AS НомерДоговора,
+                    дата_заключения AS ДатаЗаключения,
+                    наименование_юрлица AS Покупатель
+                FROM договор_поставки
+                ORDER BY ид_договора";
+            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
+        }
+
+        private void ОткрытьСертификаты_Click(object sender, RoutedEventArgs e)
+        {
+            _текущаяТаблица = "Сертификаты";
+            string запрос = @"
+                SELECT 
+                    ид_сертификата AS ид,
+                    номер_сертификата AS НомерСертификата,
+                    дата_выдачи AS ДатаВыдачи,
+                    срок_действия AS СрокДействия
+                FROM сертификат_соответствия
+                ORDER BY ид_сертификата";
+            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
+        }
+
         private void ОткрытьАгроОперации_Click(object sender, RoutedEventArgs e)
         {
             _текущаяТаблица = "АгроОперации";
@@ -172,7 +248,8 @@ namespace CoffeeProductionApp
                     плантация_вк AS ИдПлантации,
                     тип_операции_вк AS ИдТипа,
                     дата_операции AS Дата,
-                    материалы AS Материалы
+                    материалы AS Материалы,
+                    замечания AS Замечания
                 FROM агротехническая_операция
                 ORDER BY ид_агрооперации";
             ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
@@ -258,20 +335,6 @@ namespace CoffeeProductionApp
             ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
         }
 
-        private void ОткрытьДоговоры_Click(object sender, RoutedEventArgs e)
-        {
-            _текущаяТаблица = "Договоры";
-            string запрос = @"
-                SELECT 
-                    ид_договора AS ид,
-                    номер_договора AS НомерДоговора,
-                    дата_заключения AS ДатаЗаключения,
-                    наименование_юрлица AS Покупатель
-                FROM договор_поставки
-                ORDER BY ид_договора";
-            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
-        }
-
         private void ОткрытьЗаказыB2B_Click(object sender, RoutedEventArgs e)
         {
             _текущаяТаблица = "ЗаказыB2B";
@@ -297,20 +360,6 @@ namespace CoffeeProductionApp
                     заключение AS Заключение
                 FROM анализ_качества
                 ORDER BY ид_анализа";
-            ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
-        }
-
-        private void ОткрытьСертификаты_Click(object sender, RoutedEventArgs e)
-        {
-            _текущаяТаблица = "Сертификаты";
-            string запрос = @"
-                SELECT 
-                    ид_сертификата AS ид,
-                    номер_сертификата AS НомерСертификата,
-                    дата_выдачи AS ДатаВыдачи,
-                    срок_действия AS СрокДействия
-                FROM сертификат_соответствия
-                ORDER BY ид_сертификата";
             ТаблицаДанных.ItemsSource = DatabaseHelper.ExecuteQuery(запрос).DefaultView;
         }
 
@@ -378,6 +427,60 @@ namespace CoffeeProductionApp
                 if (форма.ShowDialog() == true)
                     ОткрытьСотрудники_Click(null, null);
             }
+            else if (_текущаяТаблица == "Продукция")
+            {
+                var форма = new ProductCatalogForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьПродукцию_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ПрофилиОбжарки")
+            {
+                var форма = new RoastingProfileForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьПрофилиОбжарки_Click(null, null);
+            }
+            else if (_текущаяТаблица == "Магазины")
+            {
+                var форма = new RetailShopForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьМагазины_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ТипыОпераций")
+            {
+                var форма = new OperationTypeForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьТипыОпераций_Click(null, null);
+            }
+            else if (_текущаяТаблица == "Склады")
+            {
+                var форма = new WarehouseForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьСклады_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ЗоныХранения")
+            {
+                var форма = new StorageZoneForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьЗоныХранения_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ЯчейкиХранения")
+            {
+                var форма = new StorageCellForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьЯчейкиХранения_Click(null, null);
+            }
+            else if (_текущаяТаблица == "Договоры")
+            {
+                var форма = new SupplyContractForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьДоговоры_Click(null, null);
+            }
+            else if (_текущаяТаблица == "Сертификаты")
+            {
+                var форма = new CertificateForm();
+                if (форма.ShowDialog() == true)
+                    ОткрытьСертификаты_Click(null, null);
+            }
             else
             {
                 MessageBox.Show($"Добавление для раздела \"{_текущаяТаблица}\" будет реализовано позже", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -419,6 +522,96 @@ namespace CoffeeProductionApp
                         ОткрытьСотрудники_Click(null, null);
                 }
             }
+            else if (_текущаяТаблица == "Продукция")
+            {
+                var запись = _продукцияРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new ProductCatalogForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьПродукцию_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "ПрофилиОбжарки")
+            {
+                var запись = _профилиРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new RoastingProfileForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьПрофилиОбжарки_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "Магазины")
+            {
+                var запись = _магазиныРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new RetailShopForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьМагазины_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "ТипыОпераций")
+            {
+                var запись = _типыОперацийРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new OperationTypeForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьТипыОпераций_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "Склады")
+            {
+                var запись = _складыРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new WarehouseForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьСклады_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "ЗоныХранения")
+            {
+                var запись = _зоныРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new StorageZoneForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьЗоныХранения_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "ЯчейкиХранения")
+            {
+                var запись = _ячейкиРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new StorageCellForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьЯчейкиХранения_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "Договоры")
+            {
+                var запись = _договорыРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new SupplyContractForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьДоговоры_Click(null, null);
+                }
+            }
+            else if (_текущаяТаблица == "Сертификаты")
+            {
+                var запись = _сертификатыРепозиторий.GetById(ид);
+                if (запись != null)
+                {
+                    var форма = new CertificateForm(запись);
+                    if (форма.ShowDialog() == true)
+                        ОткрытьСертификаты_Click(null, null);
+                }
+            }
             else
             {
                 MessageBox.Show($"Редактирование для раздела \"{_текущаяТаблица}\" будет реализовано позже", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -446,32 +639,32 @@ namespace CoffeeProductionApp
                         return;
                     }
 
-                    switch (_текущаяТаблица)
+                    if (_текущаяТаблица == "Плантации")
+                        _плантацииРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Сотрудники")
+                        _сотрудникиРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Продукция")
+                        _продукцияРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "ПрофилиОбжарки")
+                        _профилиРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Магазины")
+                        _магазиныРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "ТипыОпераций")
+                        _типыОперацийРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Склады")
+                        _складыРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "ЗоныХранения")
+                        _зоныРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "ЯчейкиХранения")
+                        _ячейкиРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Договоры")
+                        _договорыРепозиторий.Delete(ид);
+                    else if (_текущаяТаблица == "Сертификаты")
+                        _сертификатыРепозиторий.Delete(ид);
+                    else
                     {
-                        case "Плантации":
-                            _плантацииРепозиторий.Delete(ид);
-                            break;
-                        case "Сотрудники":
-                            _сотрудникиРепозиторий.Delete(ид);
-                            break;
-                        case "ТипыОпераций":
-                            new Repository<OperationType>().Delete(ид);
-                            break;
-                        case "ПрофилиОбжарки":
-                            _профилиРепозиторий.Delete(ид);
-                            break;
-                        case "Продукция":
-                            _продукцияРепозиторий.Delete(ид);
-                            break;
-                        case "Магазины":
-                            _магазиныРепозиторий.Delete(ид);
-                            break;
-                        case "Склады":
-                            new Repository<Warehouse>().Delete(ид);
-                            break;
-                        default:
-                            MessageBox.Show($"Удаление для раздела \"{_текущаяТаблица}\" не реализовано", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
-                            return;
+                        MessageBox.Show($"Удаление для раздела \"{_текущаяТаблица}\" не реализовано", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
                     }
 
                     КнопкаОбновить_Click(null, null);
@@ -486,27 +679,46 @@ namespace CoffeeProductionApp
 
         private void КнопкаОбновить_Click(object sender, RoutedEventArgs e)
         {
-            switch (_текущаяТаблица)
-            {
-                case "Плантации": ОткрытьПлантации_Click(null, null); break;
-                case "Сотрудники": ОткрытьСотрудники_Click(null, null); break;
-                case "ТипыОпераций": ОткрытьТипыОпераций_Click(null, null); break;
-                case "ПрофилиОбжарки": ОткрытьПрофилиОбжарки_Click(null, null); break;
-                case "Продукция": ОткрытьПродукцию_Click(null, null); break;
-                case "Магазины": ОткрытьМагазины_Click(null, null); break;
-                case "Склады": ОткрытьСклады_Click(null, null); break;
-                case "АгроОперации": ОткрытьАгроОперации_Click(null, null); break;
-                case "Урожай": ОткрытьУрожай_Click(null, null); break;
-                case "ПартииЗерна": ОткрытьПартииЗерна_Click(null, null); break;
-                case "ПроизводственныеЗаказы": ОткрытьПроизводствоЗаказы_Click(null, null); break;
-                case "ПартииГП": ОткрытьПартииГП_Click(null, null); break;
-                case "ПоступлениеВМагазин": ОткрытьПоступление_Click(null, null); break;
-                case "Договоры": ОткрытьДоговоры_Click(null, null); break;
-                case "ЗаказыB2B": ОткрытьЗаказыB2B_Click(null, null); break;
-                case "АнализыКачества": ОткрытьАнализы_Click(null, null); break;
-                case "Сертификаты": ОткрытьСертификаты_Click(null, null); break;
-                default: ОткрытьПлантации_Click(null, null); break;
-            }
+            if (_текущаяТаблица == "Плантации")
+                ОткрытьПлантации_Click(null, null);
+            else if (_текущаяТаблица == "Сотрудники")
+                ОткрытьСотрудники_Click(null, null);
+            else if (_текущаяТаблица == "ТипыОпераций")
+                ОткрытьТипыОпераций_Click(null, null);
+            else if (_текущаяТаблица == "ПрофилиОбжарки")
+                ОткрытьПрофилиОбжарки_Click(null, null);
+            else if (_текущаяТаблица == "Продукция")
+                ОткрытьПродукцию_Click(null, null);
+            else if (_текущаяТаблица == "Магазины")
+                ОткрытьМагазины_Click(null, null);
+            else if (_текущаяТаблица == "Склады")
+                ОткрытьСклады_Click(null, null);
+            else if (_текущаяТаблица == "ЗоныХранения")
+                ОткрытьЗоныХранения_Click(null, null);
+            else if (_текущаяТаблица == "ЯчейкиХранения")
+                ОткрытьЯчейкиХранения_Click(null, null);
+            else if (_текущаяТаблица == "Договоры")
+                ОткрытьДоговоры_Click(null, null);
+            else if (_текущаяТаблица == "Сертификаты")
+                ОткрытьСертификаты_Click(null, null);
+            else if (_текущаяТаблица == "АгроОперации")
+                ОткрытьАгроОперации_Click(null, null);
+            else if (_текущаяТаблица == "Урожай")
+                ОткрытьУрожай_Click(null, null);
+            else if (_текущаяТаблица == "ПартииЗерна")
+                ОткрытьПартииЗерна_Click(null, null);
+            else if (_текущаяТаблица == "ПроизводственныеЗаказы")
+                ОткрытьПроизводствоЗаказы_Click(null, null);
+            else if (_текущаяТаблица == "ПартииГП")
+                ОткрытьПартииГП_Click(null, null);
+            else if (_текущаяТаблица == "ПоступлениеВМагазин")
+                ОткрытьПоступление_Click(null, null);
+            else if (_текущаяТаблица == "ЗаказыB2B")
+                ОткрытьЗаказыB2B_Click(null, null);
+            else if (_текущаяТаблица == "АнализыКачества")
+                ОткрытьАнализы_Click(null, null);
+            else
+                ОткрытьПлантации_Click(null, null);
         }
     }
 }

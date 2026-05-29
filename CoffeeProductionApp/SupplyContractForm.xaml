@@ -1,0 +1,45 @@
+﻿<Window x:Class="CoffeeProductionApp.SupplyContractForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="📄 Договор поставки (B2B)" Height="500" Width="550" WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер договора:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="ПолеНомер" Grid.Row="0" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата заключения:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <DatePicker x:Name="ПолеДата" Grid.Row="1" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Юридическое лицо:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="ПолеЮрлицо" Grid.Row="2" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="ИНН:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="ПолеИНН" Grid.Row="3" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Условия оплаты:" FontWeight="Bold" VerticalAlignment="Top"/>
+        <TextBox x:Name="ПолеУсловия" Grid.Row="4" Grid.Column="1" Margin="5" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Мин. объём заказа (кг):" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="ПолеМинОбъем" Grid.Row="5" Grid.Column="1" Margin="5" Height="30"/>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="КнопкаСохранить" Content="💾 Сохранить" Width="120" Height="35" Margin="10" Click="КнопкаСохранить_Click" FontSize="13" Background="LightGreen"/>
+            <Button x:Name="КнопкаОтмена" Content="❌ Отмена" Width="120" Height="35" Margin="10" Click="КнопкаОтмена_Click" FontSize="13" Background="LightCoral"/>
+        </StackPanel>
+    </Grid>
+</Window>
