@@ -1,0 +1,65 @@
+﻿<Window x:Class="CoffeeProductionApp.FinishedProductBatchForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Партия готовой продукции" Height="550" Width="550" WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер партии:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtBatchNumber" Grid.Row="0" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата выпуска:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <DatePicker x:Name="dpReleaseDate" Grid.Row="1" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Производственный заказ:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <ComboBox x:Name="cboProductionOrder" Grid.Row="2" Grid.Column="1" Margin="5" Height="30" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Продукция:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <ComboBox x:Name="cboProduct" Grid.Row="3" Grid.Column="1" Margin="5" Height="30" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Тип упаковки:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <ComboBox x:Name="cboPackageType" Grid.Row="4" Grid.Column="1" Margin="5" Height="30" IsEditable="True">
+            <ComboBoxItem Content="Зерно"/>
+            <ComboBoxItem Content="Молотый"/>
+            <ComboBoxItem Content="Капсулы"/>
+            <ComboBoxItem Content="Дрип-пакеты"/>
+        </ComboBox>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Количество упаковок:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtPackageCount" Grid.Row="5" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Себестоимость единицы:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtUnitCost" Grid.Row="6" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Розничная цена:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtRetailPrice" Grid.Row="7" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Оптовая цена:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtWholesalePrice" Grid.Row="8" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Text="Срок годности:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <DatePicker x:Name="dpExpiryDate" Grid.Row="9" Grid.Column="1" Margin="5" Height="30"/>
+
+        <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="btnSave" Content="Сохранить" Width="100" Margin="10" Click="btnSave_Click"/>
+            <Button x:Name="btnCancel" Content="Отмена" Width="100" Margin="10" Click="btnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

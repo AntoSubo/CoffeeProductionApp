@@ -12,8 +12,5 @@
         public decimal HumidityPercent { get; set; }
         public int? CellId { get; set; }
         public int? ShelfLifeMonths { get; set; }
-
-        public string HarvestInfo { get; set; }
-        public string CellCode { get; set; }
     }
 }

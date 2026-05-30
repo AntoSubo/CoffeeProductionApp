@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Windows;
+using Microsoft.Data.SqlClient;
 using CoffeeProductionApp.DAL;
 using CoffeeProductionApp.Models;
 
@@ -55,25 +56,6 @@ namespace CoffeeProductionApp
             _анализыРепозиторий = new Repository<QualityAnalysis>();
 
             ОткрытьПлантации_Click(null, null);
-        }
-
-        private int ПолучитьИдИзВыделеннойСтроки()
-        {
-            if (ТаблицаДанных.SelectedItem == null)
-                return 0;
-
-            var строка = (DataRowView)ТаблицаДанных.SelectedItem;
-
-            foreach (DataColumn колонка in строка.Row.Table.Columns)
-            {
-                string имя = колонка.ColumnName.ToLower();
-                if (имя == "ид" || имя.StartsWith("ид_"))
-                {
-                    return Convert.ToInt32(строка[колонка.ColumnName]);
-                }
-            }
-
-            return 0;
         }
 
         private void ОткрытьПлантации_Click(object sender, RoutedEventArgs e)
@@ -418,68 +400,116 @@ namespace CoffeeProductionApp
             if (_текущаяТаблица == "Плантации")
             {
                 var форма = new PlantationForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьПлантации_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьПлантации_Click(null, null);
             }
             else if (_текущаяТаблица == "Сотрудники")
             {
                 var форма = new PersonForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьСотрудники_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьСотрудники_Click(null, null);
             }
             else if (_текущаяТаблица == "Продукция")
             {
                 var форма = new ProductCatalogForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьПродукцию_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьПродукцию_Click(null, null);
             }
             else if (_текущаяТаблица == "ПрофилиОбжарки")
             {
                 var форма = new RoastingProfileForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьПрофилиОбжарки_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьПрофилиОбжарки_Click(null, null);
             }
             else if (_текущаяТаблица == "Магазины")
             {
                 var форма = new RetailShopForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьМагазины_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьМагазины_Click(null, null);
             }
             else if (_текущаяТаблица == "ТипыОпераций")
             {
                 var форма = new OperationTypeForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьТипыОпераций_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьТипыОпераций_Click(null, null);
             }
             else if (_текущаяТаблица == "Склады")
             {
                 var форма = new WarehouseForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьСклады_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьСклады_Click(null, null);
             }
             else if (_текущаяТаблица == "ЗоныХранения")
             {
                 var форма = new StorageZoneForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьЗоныХранения_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьЗоныХранения_Click(null, null);
             }
             else if (_текущаяТаблица == "ЯчейкиХранения")
             {
                 var форма = new StorageCellForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьЯчейкиХранения_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьЯчейкиХранения_Click(null, null);
             }
             else if (_текущаяТаблица == "Договоры")
             {
                 var форма = new SupplyContractForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьДоговоры_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьДоговоры_Click(null, null);
             }
             else if (_текущаяТаблица == "Сертификаты")
             {
                 var форма = new CertificateForm();
-                if (форма.ShowDialog() == true)
-                    ОткрытьСертификаты_Click(null, null);
+                форма.ShowDialog();
+                ОткрытьСертификаты_Click(null, null);
+            }
+            else if (_текущаяТаблица == "Урожай")
+            {
+                var форма = new HarvestForm();
+                форма.ShowDialog();
+                ОткрытьУрожай_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ПартииЗерна")
+            {
+                var форма = new GreenBeanBatchForm();
+                форма.ShowDialog();
+                ОткрытьПартииЗерна_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ПроизводственныеЗаказы")
+            {
+                var форма = new ProductionOrderForm();
+                форма.ShowDialog();
+                ОткрытьПроизводствоЗаказы_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ПартииГП")
+            {
+                var форма = new FinishedProductBatchForm();
+                форма.ShowDialog();
+                ОткрытьПартииГП_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ПоступлениеВМагазин")
+            {
+                var форма = new StoreReceiptForm();
+                форма.ShowDialog();
+                ОткрытьПоступление_Click(null, null);
+            }
+            else if (_текущаяТаблица == "ЗаказыB2B")
+            {
+                var форма = new B2BOrderForm();
+                форма.ShowDialog();
+                ОткрытьЗаказыB2B_Click(null, null);
+            }
+            else if (_текущаяТаблица == "АнализыКачества")
+            {
+                var форма = new QualityAnalysisForm();
+                форма.ShowDialog();
+                ОткрытьАнализы_Click(null, null);
+            }
+            else if (_текущаяТаблица == "АгроОперации")
+            {
+                var форма = new AgroOperationForm();
+                форма.ShowDialog();
+                ОткрытьАгроОперации_Click(null, null);
             }
             else
             {
@@ -495,7 +525,18 @@ namespace CoffeeProductionApp
                 return;
             }
 
-            int ид = ПолучитьИдИзВыделеннойСтроки();
+            var строка = (DataRowView)ТаблицаДанных.SelectedItem;
+            int ид = 0;
+
+            foreach (DataColumn колонка in строка.Row.Table.Columns)
+            {
+                if (колонка.ColumnName.ToLower() == "ид" || колонка.ColumnName.ToLower().StartsWith("ид_"))
+                {
+                    ид = Convert.ToInt32(строка[колонка.ColumnName]);
+                    break;
+                }
+            }
+
             if (ид == 0)
             {
                 MessageBox.Show("Не удалось определить ID записи", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -504,112 +545,72 @@ namespace CoffeeProductionApp
 
             if (_текущаяТаблица == "Плантации")
             {
-                var запись = _плантацииРепозиторий.GetById(ид);
-                if (запись != null)
+                string query = $"SELECT * FROM плантация WHERE ид_плантации = {ид}";
+                DataTable dt = DatabaseHelper.ExecuteQuery(query);
+                if (dt.Rows.Count > 0)
                 {
+                    DataRow row = dt.Rows[0];
+                    var запись = new Plantation
+                    {
+                        Id = ид,
+                        Name = row["название"].ToString(),
+                        Country = row["страна"].ToString(),
+                        Region = row["регион"].ToString(),
+                        Coordinates = row["координаты"].ToString(),
+                        Area = Convert.ToDecimal(row["площадь"]),
+                        PlantingDate = row["дата_посадки"] as DateTime?,
+                        CoffeeVariety = row["сорт_кофе"].ToString(),
+                        SoilType = row["тип_почвы"].ToString(),
+                        IrrigationSystem = row["система_полива"].ToString()
+                    };
                     var форма = new PlantationForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьПлантации_Click(null, null);
+                    форма.ShowDialog();
+                    ОткрытьПлантации_Click(null, null);
                 }
             }
             else if (_текущаяТаблица == "Сотрудники")
             {
-                var запись = _сотрудникиРепозиторий.GetById(ид);
-                if (запись != null)
+                string query = $"SELECT * FROM человек WHERE ид_человека = {ид}";
+                DataTable dt = DatabaseHelper.ExecuteQuery(query);
+                if (dt.Rows.Count > 0)
                 {
+                    DataRow row = dt.Rows[0];
+                    var запись = new Person
+                    {
+                        Id = ид,
+                        FullName = row["фио"].ToString(),
+                        Phone = row["телефон"].ToString(),
+                        Email = row["электронная_почта"].ToString(),
+                        BirthDate = row["дата_рождения"] as DateTime?,
+                        PassportData = row["паспортные_данные"].ToString()
+                    };
                     var форма = new PersonForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьСотрудники_Click(null, null);
+                    форма.ShowDialog();
+                    ОткрытьСотрудники_Click(null, null);
                 }
             }
-            else if (_текущаяТаблица == "Продукция")
+            else if (_текущаяТаблица == "ПартииЗерна")
             {
-                var запись = _продукцияРепозиторий.GetById(ид);
-                if (запись != null)
+                string query = $"SELECT * FROM партия_зеленого_зерна WHERE ид_партии_зеленого_зерна = {ид}";
+                DataTable dt = DatabaseHelper.ExecuteQuery(query);
+                if (dt.Rows.Count > 0)
                 {
-                    var форма = new ProductCatalogForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьПродукцию_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "ПрофилиОбжарки")
-            {
-                var запись = _профилиРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new RoastingProfileForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьПрофилиОбжарки_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "Магазины")
-            {
-                var запись = _магазиныРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new RetailShopForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьМагазины_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "ТипыОпераций")
-            {
-                var запись = _типыОперацийРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new OperationTypeForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьТипыОпераций_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "Склады")
-            {
-                var запись = _складыРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new WarehouseForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьСклады_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "ЗоныХранения")
-            {
-                var запись = _зоныРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new StorageZoneForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьЗоныХранения_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "ЯчейкиХранения")
-            {
-                var запись = _ячейкиРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new StorageCellForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьЯчейкиХранения_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "Договоры")
-            {
-                var запись = _договорыРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new SupplyContractForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьДоговоры_Click(null, null);
-                }
-            }
-            else if (_текущаяТаблица == "Сертификаты")
-            {
-                var запись = _сертификатыРепозиторий.GetById(ид);
-                if (запись != null)
-                {
-                    var форма = new CertificateForm(запись);
-                    if (форма.ShowDialog() == true)
-                        ОткрытьСертификаты_Click(null, null);
+                    DataRow row = dt.Rows[0];
+                    var запись = new GreenBeanBatch
+                    {
+                        Id = ид,
+                        BatchNumber = row["номер_партии"].ToString(),
+                        ReceiptDate = Convert.ToDateTime(row["дата_приемки"]),
+                        CountryOfOrigin = row["страна_происхождения"].ToString(),
+                        Variety = row["сорт"].ToString(),
+                        NetWeightKg = Convert.ToDecimal(row["вес_нетто_кг"]),
+                        HumidityPercent = Convert.ToDecimal(row["влажность_процент"]),
+                        CellId = row["ячейка_вк"] != DBNull.Value ? Convert.ToInt32(row["ячейка_вк"]) : (int?)null,
+                        ShelfLifeMonths = row["срок_хранения_мес"] != DBNull.Value ? Convert.ToInt32(row["срок_хранения_мес"]) : (int?)null
+                    };
+                    var форма = new GreenBeanBatchForm(запись);
+                    форма.ShowDialog();
+                    ОткрытьПартииЗерна_Click(null, null);
                 }
             }
             else
@@ -628,49 +629,129 @@ namespace CoffeeProductionApp
 
             var результат = MessageBox.Show("Вы уверены, что хотите удалить эту запись?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (результат == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    int ид = ПолучитьИдИзВыделеннойСтроки();
-                    if (ид == 0)
-                    {
-                        MessageBox.Show("Не удалось определить ID записи для удаления", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
+            if (результат != MessageBoxResult.Yes) return;
 
-                    if (_текущаяТаблица == "Плантации")
-                        _плантацииРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Сотрудники")
-                        _сотрудникиРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Продукция")
-                        _продукцияРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "ПрофилиОбжарки")
-                        _профилиРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Магазины")
-                        _магазиныРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "ТипыОпераций")
-                        _типыОперацийРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Склады")
-                        _складыРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "ЗоныХранения")
-                        _зоныРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "ЯчейкиХранения")
-                        _ячейкиРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Договоры")
-                        _договорыРепозиторий.Delete(ид);
-                    else if (_текущаяТаблица == "Сертификаты")
-                        _сертификатыРепозиторий.Delete(ид);
-                    else
+            try
+            {
+                var строка = (DataRowView)ТаблицаДанных.SelectedItem;
+                int ид = 0;
+
+                foreach (DataColumn колонка in строка.Row.Table.Columns)
+                {
+                    string имя = колонка.ColumnName.ToLower();
+                    if (имя == "ид" || имя.StartsWith("ид_"))
                     {
+                        ид = Convert.ToInt32(строка[колонка.ColumnName]);
+                        break;
+                    }
+                }
+
+                if (ид == 0)
+                {
+                    MessageBox.Show("Не удалось определить ID записи", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                string имяТаблицы = "";
+                string имяКолонки = "";
+
+                switch (_текущаяТаблица)
+                {
+                    case "Плантации":
+                        имяТаблицы = "плантация";
+                        имяКолонки = "ид_плантации";
+                        break;
+                    case "Сотрудники":
+                        имяТаблицы = "человек";
+                        имяКолонки = "ид_человека";
+                        break;
+                    case "Продукция":
+                        имяТаблицы = "готовая_продукция_справочник";
+                        имяКолонки = "ид_справочника";
+                        break;
+                    case "ПрофилиОбжарки":
+                        имяТаблицы = "профиль_обжарки";
+                        имяКолонки = "ид_профиля";
+                        break;
+                    case "Магазины":
+                        имяТаблицы = "розничный_магазин";
+                        имяКолонки = "ид_магазина";
+                        break;
+                    case "ТипыОпераций":
+                        имяТаблицы = "тип_операции";
+                        имяКолонки = "ид_типа_операции";
+                        break;
+                    case "Склады":
+                        имяТаблицы = "склад";
+                        имяКолонки = "ид_склада";
+                        break;
+                    case "ЗоныХранения":
+                        имяТаблицы = "зона_хранения";
+                        имяКолонки = "ид_зоны";
+                        break;
+                    case "ЯчейкиХранения":
+                        имяТаблицы = "ячейка_хранения";
+                        имяКолонки = "ид_ячейки";
+                        break;
+                    case "Договоры":
+                        имяТаблицы = "договор_поставки";
+                        имяКолонки = "ид_договора";
+                        break;
+                    case "Сертификаты":
+                        имяТаблицы = "сертификат_соответствия";
+                        имяКолонки = "ид_сертификата";
+                        break;
+                    case "Урожай":
+                        имяТаблицы = "урожай";
+                        имяКолонки = "ид_урожая";
+                        break;
+                    case "ПартииЗерна":
+                        имяТаблицы = "партия_зеленого_зерна";
+                        имяКолонки = "ид_партии_зеленого_зерна";
+                        break;
+                    case "ПроизводственныеЗаказы":
+                        имяТаблицы = "производственный_заказ";
+                        имяКолонки = "ид_заказа";
+                        break;
+                    case "ПартииГП":
+                        имяТаблицы = "партия_готовой_продукции";
+                        имяКолонки = "ид_партии_гп";
+                        break;
+                    case "ПоступлениеВМагазин":
+                        имяТаблицы = "поступление_в_магазин";
+                        имяКолонки = "ид_поступления";
+                        break;
+                    case "ЗаказыB2B":
+                        имяТаблицы = "заказ_в2в";
+                        имяКолонки = "ид_заказа_в2в";
+                        break;
+                    case "АнализыКачества":
+                        имяТаблицы = "анализ_качества";
+                        имяКолонки = "ид_анализа";
+                        break;
+                    case "АгроОперации":
+                        имяТаблицы = "агротехническая_операция";
+                        имяКолонки = "ид_агрооперации";
+                        break;
+                    default:
                         MessageBox.Show($"Удаление для раздела \"{_текущаяТаблица}\" не реализовано", "В разработке", MessageBoxButton.OK, MessageBoxImage.Information);
                         return;
-                    }
-
-                    КнопкаОбновить_Click(null, null);
-                    MessageBox.Show("Запись успешно удалена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                catch (Exception ex)
+
+                string query = $"DELETE FROM {имяТаблицы} WHERE {имяКолонки} = @ид";
+                SqlParameter[] параметры = { new SqlParameter("@ид", ид) };
+                DatabaseHelper.ExecuteNonQuery(query, параметры);
+
+                КнопкаОбновить_Click(null, null);
+                MessageBox.Show("Запись успешно удалена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("REFERENCE constraint"))
+                {
+                    MessageBox.Show("Невозможно удалить запись, так как на неё есть ссылки в других таблицах.\n\nСначала удалите все связанные записи.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
                 {
                     MessageBox.Show($"Ошибка при удалении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
+
 namespace CoffeeProductionApp
 {
     public partial class WarehouseForm : Window

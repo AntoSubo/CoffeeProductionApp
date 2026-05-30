@@ -1,0 +1,44 @@
+﻿<Window x:Class="CoffeeProductionApp.StoreReceiptForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Поступление в магазин" Height="450" Width="500" WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Дата поступления:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <DatePicker x:Name="dpReceiptDate" Grid.Row="0" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Магазин:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <ComboBox x:Name="cboShop" Grid.Row="1" Grid.Column="1" Margin="5" Height="30" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Партия готовой продукции:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <ComboBox x:Name="cboBatch" Grid.Row="2" Grid.Column="1" Margin="5" Height="30" DisplayMemberPath="Value" SelectedValuePath="Key"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Количество:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtQuantity" Grid.Row="3" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Закупочная цена:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtPurchasePrice" Grid.Row="4" Grid.Column="1" Margin="5" Height="30"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Розничная цена:" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtRetailPrice" Grid.Row="5" Grid.Column="1" Margin="5" Height="30"/>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="btnSave" Content="Сохранить" Width="100" Margin="10" Click="btnSave_Click"/>
+            <Button x:Name="btnCancel" Content="Отмена" Width="100" Margin="10" Click="btnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

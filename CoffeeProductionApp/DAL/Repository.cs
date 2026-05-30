@@ -10,11 +10,13 @@ namespace CoffeeProductionApp.DAL
     {
         private readonly string _tableName;
         private readonly PropertyInfo[] _properties;
+        private string _idColumnName;
 
         public Repository()
         {
             _tableName = EntityMapper.GetTableName<T>();
             _properties = typeof(T).GetProperties();
+            _idColumnName = GetIdColumnName();
         }
 
         public DataTable GetAll()
@@ -25,15 +27,25 @@ namespace CoffeeProductionApp.DAL
 
         public T GetById(int id)
         {
-            string idColumnName = GetIdColumnName();
-            string query = $"SELECT * FROM {_tableName} WHERE {idColumnName} = @id";
-            SqlParameter[] parameters = { new SqlParameter("@id", id) };
-            DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
+            try
+            {
+                string query = $"SELECT * FROM {_tableName} WHERE {_idColumnName} = @id";
+                SqlParameter[] parameters = { new SqlParameter("@id", id) };
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, parameters);
 
-            if (dt.Rows.Count == 0)
+                if (dt.Rows.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"GetById: Запись с ID {id} не найдена в таблице {_tableName}");
+                    return default(T);
+                }
+
+                return EntityMapper.MapToEntity<T>(dt.Rows[0]);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetById ошибка: {ex.Message}");
                 return default(T);
-
-            return EntityMapper.MapToEntity<T>(dt.Rows[0]);
+            }
         }
 
         public int Add(T entity)
@@ -62,24 +74,24 @@ namespace CoffeeProductionApp.DAL
         {
             var (setClause, parameters) = BuildUpdateParameters(entity);
             int id = GetIdValue(entity);
-            string idColumnName = GetIdColumnName();
 
             string query = $@"
                 UPDATE {_tableName} 
                 SET {setClause}
-                WHERE {idColumnName} = @id";
+                WHERE {_idColumnName} = @id";
 
             SqlParameter[] allParams = new SqlParameter[parameters.Length + 1];
             Array.Copy(parameters, allParams, parameters.Length);
             allParams[parameters.Length] = new SqlParameter("@id", id);
 
-            return DatabaseHelper.ExecuteNonQuery(query, allParams);
+            int result = DatabaseHelper.ExecuteNonQuery(query, allParams);
+            System.Diagnostics.Debug.WriteLine($"Update: {query}, ID={id}, Result={result}");
+            return result;
         }
 
         public int Delete(int id)
         {
-            string idColumnName = GetIdColumnName();
-            string query = $"DELETE FROM {_tableName} WHERE {idColumnName} = @id";
+            string query = $"DELETE FROM {_tableName} WHERE {_idColumnName} = @id";
             SqlParameter[] parameters = { new SqlParameter("@id", id) };
             return DatabaseHelper.ExecuteNonQuery(query, parameters);
         }
@@ -96,19 +108,35 @@ namespace CoffeeProductionApp.DAL
 
         private string GetIdColumnName()
         {
-            string query = $"SELECT TOP 1 * FROM {_tableName}";
-            DataTable dt = DatabaseHelper.ExecuteQuery(query);
-
-            foreach (DataColumn col in dt.Columns)
+            try
             {
-                string colName = col.ColumnName.ToLower();
-                if (colName == "ид" || colName.StartsWith("ид_"))
-                {
-                    return col.ColumnName;
-                }
-            }
+                string query = $"SELECT TOP 1 * FROM {_tableName}";
+                DataTable dt = DatabaseHelper.ExecuteQuery(query);
 
-            return dt.Columns[0].ColumnName;
+                if (dt.Columns.Count == 0)
+                {
+                    return "ид";
+                }
+
+                foreach (DataColumn col in dt.Columns)
+                {
+                    string colName = col.ColumnName.ToLower();
+                    if (colName == "ид" || colName.StartsWith("ид_"))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"GetIdColumnName: Найдена колонка {col.ColumnName} для таблицы {_tableName}");
+                        return col.ColumnName;
+                    }
+                }
+
+                string firstColumn = dt.Columns[0].ColumnName;
+                System.Diagnostics.Debug.WriteLine($"GetIdColumnName: Использую первую колонку {firstColumn} для таблицы {_tableName}");
+                return firstColumn;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetIdColumnName ошибка: {ex.Message}");
+                return "ид";
+            }
         }
 
         private (string columns, string values, SqlParameter[] parameters) BuildInsertParameters(T entity)
@@ -168,7 +196,11 @@ namespace CoffeeProductionApp.DAL
             {
                 if (prop.Name == "Id")
                 {
-                    return Convert.ToInt32(prop.GetValue(entity));
+                    object value = prop.GetValue(entity);
+                    if (value != null)
+                    {
+                        return Convert.ToInt32(value);
+                    }
                 }
             }
             throw new Exception("Id property not found");

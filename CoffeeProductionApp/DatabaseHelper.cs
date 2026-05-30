@@ -5,8 +5,8 @@ namespace CoffeeProductionApp
 {
     public static class DatabaseHelper
     {
-        private static string connectionString = @"Server=dbsrv\vip2025;Database=сме_2307б_инд_проект_кофе;Integrated Security=true;TrustServerCertificate=true;";
-
+        // private static string connectionString = @"Server=dbsrv\vip2025;Database=сме_2307б_инд_проект_кофе;Integrated Security=true;TrustServerCertificate=true;";
+        private static string connectionString = @"Server=localhost;Database=курсач плотников;Integrated Security=true;TrustServerCertificate=true;";
         public static SqlConnection GetConnection()
         {
             return new SqlConnection(connectionString);
